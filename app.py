@@ -2,10 +2,21 @@ from flask import Flask, request, send_file
 from PIL import Image, ImageDraw, ImageFont
 import io
 import os
+import urllib.request
 
 app = Flask(__name__)
 
 FONT_PATH = os.path.join(os.path.dirname(__file__), "font.ttf")
+
+def ensure_font():
+    if not os.path.exists(FONT_PATH) or os.path.getsize(FONT_PATH) < 1000:
+        url = "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/Korean/NotoSansCJKkr-Regular.otf"
+        try:
+            urllib.request.urlretrieve(url, FONT_PATH)
+        except:
+            pass
+
+ensure_font()
 
 BG        = (13, 13, 26)
 PANEL     = (22, 18, 46)
